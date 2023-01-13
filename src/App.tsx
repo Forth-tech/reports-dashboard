@@ -1,9 +1,10 @@
 import "./App.css";
+import Login from "./components/Login";
 import Purchase from "./components/Purchase";
 
 function App() {
   return (
-    <Purchase></Purchase>
+    <Login></Login>
   );
 }
 
