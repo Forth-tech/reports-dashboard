@@ -1,6 +1,9 @@
 import React from "react";
+import { IPurchase } from "../types/purchase.types";
 
-type Props = PurchaseProps & {};
+type Props = {
+  purchase: IPurchase;
+};
 
 const PurchaseItem: React.FC<Props> = ({ purchase }) => {
   return (
