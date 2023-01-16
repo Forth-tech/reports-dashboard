@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { fetchPurchase, fetchPurchases } from "../store/purchase-actions";
 import { IPurchase } from "../types/purchase.types";
 import PurchaseItem from "./PurchaseItem";
 
-const Purchase = () => {
+type Props = {};
+
+const Purchase: React.FC<Props> = () => {
   const [purchase_id, setPurchase_id] = useState(0);
   const dispatch = useAppDispatch();
   const allPurchases = useAppSelector((state) => state.purchase.purchases);
   const purchase = useAppSelector((state) => state.purchase.activePurchase);
+  const acccessToken = useAppSelector((state) => state.user.user?.access_token);
+
+  useEffect(() => {
+    if (acccessToken && !checkPurchases()) {
+      dispatch(fetchPurchases(acccessToken));
+    }
+  })
 
   const clickHandler = () => {
-    dispatch(fetchPurchases());
+    dispatch(fetchPurchases(acccessToken as string));
   };
 
   const searchHandler = () => {
-    dispatch(fetchPurchase(purchase_id));
+    dispatch(fetchPurchase(purchase_id, acccessToken as string));
   };
 
   const checkPurchases = (): boolean => {
@@ -51,12 +62,28 @@ const Purchase = () => {
       </div>
       <div>
         <h1>All Purchases</h1>
-        <div>
-          {checkPurchases() &&
-            allPurchases.map((purchase) => (
-              <PurchaseItem key={purchase.id} purchase={purchase} />
-            ))}
-        </div>
+        {checkPurchases() && (
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Seller</th>
+                <th>Store</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allPurchases.map((purchase) => (
+                <tr key={purchase.id}>
+                  <td>{purchase.id}</td>
+                  <td>{purchase.id_seller}</td>
+                  <td>{purchase.id_store}</td>
+                  <td>{purchase.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </div>
     </>
   );

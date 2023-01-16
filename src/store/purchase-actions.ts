@@ -7,23 +7,26 @@ import purchaseSlice from "./purchase-slice";
 
 export const purchaseActions = purchaseSlice.actions;
 
-export const fetchPurchases = (): ThunkAction<
-  void,
-  RootState,
-  unknown,
-  AnyAction
-> => {
+export const fetchPurchases = (
+  access_token: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    const response: IPurchase[] = await purchaseService.getAllPurchases();
+    const response: IPurchase[] = await purchaseService.getAllPurchases(
+      access_token
+    );
     dispatch(purchaseActions.getPurchases(response));
   };
 };
 
 export const fetchPurchase = (
-  id: number
+  id: number,
+  access_token: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    const response: IPurchase = await purchaseService.getPurchase(id);
+    const response: IPurchase = await purchaseService.getPurchase(
+      id,
+      access_token
+    );
     dispatch(purchaseActions.getPurchase(response));
   };
 };
