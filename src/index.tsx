@@ -3,13 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import {
-  applyMiddleware,
-  legacy_createStore as createStore,
-  Store,
-} from "redux";
-import reducer from "./store";
-import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import store from "./store";
 

@@ -11,6 +11,7 @@ const PurchaseItem: React.FC<Props> = ({ purchase }) => {
       <h2>{purchase.nf}</h2>
       <p>{purchase.id_seller}</p>
       <p>{purchase.id_store}</p>
+      <p>{purchase.id}</p>
     </div>
   );
 };
