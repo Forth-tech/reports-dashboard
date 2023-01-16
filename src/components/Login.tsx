@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { login } from "../store/user-action";
 
@@ -7,18 +9,27 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [didAttempt, setDidAttempt] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user);
 
   const handleLogin = () => {
     if (checkEmail() && checkPassword()) {
       dispatch(login(email, password));
-      setDidAttempt(true);
     } else {
-      setError("Please enter email and password");
+      toast.error("Please enter email and password");
     }
   };
+
+  useEffect(() => {
+    if (user.error) {
+      toast.error(user.error);
+    }
+    if (user.user) {
+      navigate("/purchase")
+    }
+  }, [user]);
 
   const checkPassword = (): boolean => {
     if (password.length > 0) {
@@ -36,15 +47,12 @@ const Login = () => {
 
   return (
     <>
+    <Toaster position="top-center"/>
       <div>
         <h1>Login</h1>
         <input type="text" onChange={(e) => setEmail(e.target.value)} />
         <input type="password" onChange={(e) => setPassword(e.target.value)} />
         <button onClick={handleLogin}>Login</button>
-      </div>
-      <div>
-        <p>{error}</p>
-        <p>{didAttempt && user ? "Login successful" : "Login failed"}</p>
       </div>
     </>
   );
